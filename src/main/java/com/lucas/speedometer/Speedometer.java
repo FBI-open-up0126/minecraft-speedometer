@@ -83,8 +83,7 @@ public class Speedometer {
 
         if (playerPosLastTick != null && elapsedTicks != 0) {
             double distance = getDistanceBetweenBlockPos(playerPos, playerPosLastTick);
-            double speed = 0;
-            speed = distance / elapsedTicks;
+            double speed = distance / elapsedTicks;
             Speedometer.speed = speed;
         }
 
