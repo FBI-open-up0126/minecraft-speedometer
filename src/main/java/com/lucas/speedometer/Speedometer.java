@@ -60,33 +60,36 @@ public class Speedometer {
 
     @SubscribeEvent(priority = EventPriority.NORMAL)
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            if (tickCount < TICK_PER_UPDATE) {
-                tickCount += 1;
-                return;
-            }
-
-            PlayerEntity player = Minecraft.getInstance().player;
-
-            if (player != null) {
-                Vector3d playerPos = player.position();
-
-                double currentTime = System.nanoTime();
-                double elapsedTicks = (lastTickTime == -1) ? 0 : (currentTime - lastTickTime) / 1000000000;
-                lastTickTime = currentTime;
-
-                if (playerPosLastTick != null && elapsedTicks != 0) {
-                    double distance = getDistanceBetweenBlockPos(playerPos, playerPosLastTick);
-                    double speed = 0;
-                    speed = distance / elapsedTicks;
-                    Speedometer.speed = speed;
-                }
-
-                playerPosLastTick = playerPos;
-            }
-
-            tickCount = 0;
+        if (event.phase != TickEvent.Phase.END) {
+            return;
         }
+
+        if (tickCount < TICK_PER_UPDATE) {
+            tickCount += 1;
+            return;
+        }
+
+        PlayerEntity player = Minecraft.getInstance().player;
+
+        if (player == null) {
+            return;
+        }
+
+        Vector3d playerPos = player.position();
+
+        double currentTime = System.nanoTime();
+        double elapsedTicks = (lastTickTime == -1) ? 0 : (currentTime - lastTickTime) / 1000000000;
+        lastTickTime = currentTime;
+
+        if (playerPosLastTick != null && elapsedTicks != 0) {
+            double distance = getDistanceBetweenBlockPos(playerPos, playerPosLastTick);
+            double speed = 0;
+            speed = distance / elapsedTicks;
+            Speedometer.speed = speed;
+        }
+
+        playerPosLastTick = playerPos;
+        tickCount = 0;
     }
 
     public static double getDistanceBetweenBlockPos(Vector3d pos1, Vector3d pos2) {
