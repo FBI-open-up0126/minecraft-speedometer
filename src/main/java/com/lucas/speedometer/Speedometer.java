@@ -58,12 +58,7 @@ public class Speedometer {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @SubscribeEvent(priority = EventPriority.NORMAL)
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) {
-            return;
-        }
-
+    public static void calculateSpeed() {
         if (tickCount < TICK_PER_UPDATE) {
             tickCount += 1;
             return;
@@ -91,6 +86,15 @@ public class Speedometer {
         tickCount = 0;
     }
 
+    @SubscribeEvent(priority = EventPriority.NORMAL)
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) {
+            return;
+        }
+
+        calculateSpeed();
+    }
+
     public static double getDistanceBetweenBlockPos(Vector3d pos1, Vector3d pos2) {
         double dx = pos2.x() - pos1.x();
         double dz = pos2.z() - pos1.z();
@@ -99,13 +103,13 @@ public class Speedometer {
 
     @SubscribeEvent
     public static void onDebugOverlay(RenderGameOverlayEvent.Text event) {
-        if (Minecraft.getInstance().options.renderDebug) {
-            DecimalFormat df = new DecimalFormat("#.##");
-
-            event.getLeft().add("Speed: " + df.format(speed) + " b/s");
+        if (!Minecraft.getInstance().options.renderDebug) {
+            return;
         }
-    }
 
+        DecimalFormat df = new DecimalFormat("#.##");
+        event.getLeft().add("Speed: " + df.format(speed) + " b/s");
+    }
 
     private void setup(final FMLCommonSetupEvent event) {
         // some preinit code
