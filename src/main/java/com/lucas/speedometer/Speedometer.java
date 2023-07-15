@@ -70,16 +70,13 @@ public class Speedometer {
 
             if (player != null) {
                 Vector3d playerPos = player.position();
-                LOGGER.info("playerPos" + playerPos);
 
                 double currentTime = System.nanoTime();
                 double elapsedTicks = (lastTickTime == -1) ? 0 : (currentTime - lastTickTime) / 1000000000;
-                LOGGER.info("elapsed tick:" + elapsedTicks);
                 lastTickTime = currentTime;
 
                 if (playerPosLastTick != null && elapsedTicks != 0) {
                     double distance = getDistanceBetweenBlockPos(playerPos, playerPosLastTick);
-                    LOGGER.info("distance: " + distance);
                     double speed = 0;
                     speed = distance / elapsedTicks;
                     Speedometer.speed = speed;
@@ -94,9 +91,8 @@ public class Speedometer {
 
     public static double getDistanceBetweenBlockPos(Vector3d pos1, Vector3d pos2) {
         double dx = pos2.x() - pos1.x();
-//        double dy = pos2.y() - pos1.y();
         double dz = pos2.z() - pos1.z();
-        return MathHelper.sqrt(dx * dx /* + dy * dy */ + dz * dz);
+        return MathHelper.sqrt(dx * dx + dz * dz);
     }
 
     @SubscribeEvent
