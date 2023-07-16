@@ -11,10 +11,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import static net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
-import java.text.DecimalFormat;
-
-@Mod.EventBusSubscriber(modid = Speedometer.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Speedometer.MOD_ID, bus = Bus.FORGE)
 public class SpeedometerEvent {
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -22,7 +21,6 @@ public class SpeedometerEvent {
 
     private static Vector3d playerPosLastTick = null;
     private static double lastTickTime = -1;
-//    private static double speed = 0;
     private static SpeedInfo speedInfo;
     private static int tickCount = 0;
 
@@ -45,9 +43,6 @@ public class SpeedometerEvent {
         lastTickTime = currentTime;
 
         if (playerPosLastTick != null && elapsedTicks != 0) {
-//            double horizontalDistance = horizontalDistance(playerPos, playerPosLastTick);
-//            double speed = horizontalDistance / elapsedTicks;
-//            SpeedometerEvent.speed = speed;
             speedInfo = SpeedInfo.calculateSpeedInfo(playerPos, playerPosLastTick, elapsedTicks);
         }
 
@@ -71,8 +66,7 @@ public class SpeedometerEvent {
             return;
         }
 
-        DecimalFormat df = new DecimalFormat("#.##");
-        String info = String.format("hor speed: %.2f b/s, ver speed: %.2f b/s, speed: %.2f b/s", speedInfo.horizontalSpeed, speedInfo.verticalSpeed, speedInfo.speed);
+        String info = String.format("hor spd: %.2f b/s, ver spd: %.2f b/s, spd: %.2f b/s", speedInfo.horizontalSpeed, speedInfo.verticalSpeed, speedInfo.speed);
         event.getLeft().add(info);
     }
 }
