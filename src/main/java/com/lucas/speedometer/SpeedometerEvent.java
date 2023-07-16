@@ -3,7 +3,6 @@ package com.lucas.speedometer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent;
@@ -23,7 +22,8 @@ public class SpeedometerEvent {
 
     private static Vector3d playerPosLastTick = null;
     private static double lastTickTime = -1;
-    private static double speed = 0;
+//    private static double speed = 0;
+    private static SpeedInfo speedInfo;
     private static int tickCount = 0;
 
     public static void calculateSpeed() {
@@ -45,9 +45,10 @@ public class SpeedometerEvent {
         lastTickTime = currentTime;
 
         if (playerPosLastTick != null && elapsedTicks != 0) {
-            double distance = getDistanceBetweenBlockPos(playerPos, playerPosLastTick);
-            double speed = distance / elapsedTicks;
-            SpeedometerEvent.speed = speed;
+//            double horizontalDistance = horizontalDistance(playerPos, playerPosLastTick);
+//            double speed = horizontalDistance / elapsedTicks;
+//            SpeedometerEvent.speed = speed;
+            speedInfo = SpeedInfo.calculateSpeedInfo(playerPos, playerPosLastTick, elapsedTicks);
         }
 
         playerPosLastTick = playerPos;
@@ -63,11 +64,6 @@ public class SpeedometerEvent {
         calculateSpeed();
     }
 
-    public static double getDistanceBetweenBlockPos(Vector3d pos1, Vector3d pos2) {
-        double dx = pos2.x() - pos1.x();
-        double dz = pos2.z() - pos1.z();
-        return MathHelper.sqrt(dx * dx + dz * dz);
-    }
 
     @SubscribeEvent
     public static void onDebugOverlay(RenderGameOverlayEvent.Text event) {
@@ -76,6 +72,7 @@ public class SpeedometerEvent {
         }
 
         DecimalFormat df = new DecimalFormat("#.##");
-        event.getLeft().add("Speed: " + df.format(speed) + " b/s");
+        String info = String.format("hor speed: %.2f b/s, ver speed: %.2f b/s, speed: %.2f b/s", speedInfo.horizontalSpeed, speedInfo.verticalSpeed, speedInfo.speed);
+        event.getLeft().add(info);
     }
 }
