@@ -14,29 +14,29 @@ public class SpeedInfo {
         this.speed = speed;
     }
 
-    public static SpeedInfo calculateSpeedInfo(Vector3d pos1, Vector3d pos2, double elapsedTick) {
+    public static SpeedInfo calculateSpeedInfo(Vector3d pos1, Vector3d pos2, double elapsedTimeInSecs) {
         return new SpeedInfo(
-            horizontalDistance(pos1, pos2) / elapsedTick,
-            verticalDistance(pos1, pos2) / elapsedTick,
-            distance(pos1, pos2) / elapsedTick
+            horizontalDistance(pos1, pos2) / elapsedTimeInSecs,
+            verticalDistance(pos1, pos2) / elapsedTimeInSecs,
+            distance(pos1, pos2) / elapsedTimeInSecs
         );
     }
 
     public static double horizontalDistance(Vector3d pos1, Vector3d pos2) {
         double dx = pos2.x - pos1.x;
         double dz = pos2.z - pos1.z;
-        return MathHelper.sqrt(dx * dx + dz * dz);
+        return Math.sqrt(dx * dx + dz * dz);
     }
 
     public static double verticalDistance(Vector3d pos1, Vector3d pos2) {
-        double dy = pos2.y - pos1.y;
-        return Math.abs(dy);
+        double dy = pos1.y - pos2.y;
+        return dy;
     }
 
     public static double distance(Vector3d pos1, Vector3d pos2) {
         double dx = pos2.x - pos1.x;
         double dy = pos2.y - pos1.y;
         double dz = pos2.z - pos1.z;
-        return MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
+        return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 }
