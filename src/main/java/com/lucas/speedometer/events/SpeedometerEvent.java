@@ -30,7 +30,6 @@ import static net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 @Mod.EventBusSubscriber(modid = Speedometer.MOD_ID, bus = Bus.FORGE)
 public class SpeedometerEvent {
     private static final Logger LOGGER = LogManager.getLogger();
-    public static final String TICK_UPDATE_SPEED_KEY = Speedometer.MOD_ID + "_tick_per_update";
 
     public static final double DEFAULT_SECONDS_PER_UPDATE = 1;
 
@@ -153,7 +152,7 @@ public class SpeedometerEvent {
                 savedTickPerUpdate = scanner.nextDouble();
             }
             scanner.close();
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException ignored) {
         }
 
         if (savedTickPerUpdate == -1) {
